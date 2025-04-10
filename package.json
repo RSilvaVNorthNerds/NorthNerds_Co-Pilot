@@ -14,8 +14,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "northnerds-co-pilot.helloWorld",
-        "title": "Hello World"
+        "command": "northnerds-co-pilot.LaunchCoPilot",
+        "title": "North Nerds: Launch Co-Pilot"
       }
     ]
   },
