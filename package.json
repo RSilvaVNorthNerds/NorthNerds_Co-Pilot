@@ -17,7 +17,27 @@
         "command": "northnerds-co-pilot.LaunchCoPilot",
         "title": "North Nerds: Launch Co-Pilot"
       }
-    ]
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "title": "North Nerds Co-Pilot",
+          "icon": "",
+          "id": "northnerds-co-pilot",
+          "name": "North Nerds Co-Pilot",
+          "location": "right"
+        }
+      ]
+    },
+    "views": {
+      "northnerds-co-pilot": [
+        {
+          "type": "webview",
+          "id": "northnerds-co-pilot",
+          "name": "North Nerds Co-Pilot"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
