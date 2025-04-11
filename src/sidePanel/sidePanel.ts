@@ -34,7 +34,7 @@ export default class SidePanel {
               border-bottom: 1px solid #eee;
           }
           .chat-area {
-              height: calc(100vh - 200px);
+              height: calc(100vh - 300px);
               overflow-y: auto;
               margin-bottom: 20px;
               padding: 10px;
@@ -43,6 +43,7 @@ export default class SidePanel {
           }
           .input-area {
               display: flex;
+              flex-direction: column;
               gap: 10px;
           }
           input {
@@ -62,6 +63,16 @@ export default class SidePanel {
           button:hover {
               background-color: #0062a3;
           }
+          .message {
+              margin-bottom: 10px;
+          }
+          .message-content {
+              padding: 8px;
+              border: 1px solid #ddd;
+              border-radius: 4px;
+              background-color: #f9f9f9;
+              color: #333;
+        }
       </style>
   </head>
   <body>
@@ -91,13 +102,42 @@ export default class SidePanel {
                       command: 'message',
                       text: message
                   });
+
+                //add message to chat area
+                const messageElement = document.createElement('div');
+                messageElement.className = 'message';
+                const contentElement = document.createElement('div');
+                contentElement.className = 'message-content';
+                contentElement.textContent = message;
+                messageElement.appendChild(contentElement);
+                chatArea.appendChild(messageElement);
+
                   messageInput.value = '';
               }
           });
 
-          messageInput.addEventListener('keypress', (e) => {
-              if (e.key === 'Enter') {
+          //handle enter key
+          messageInput.addEventListener('keyup', (event) => {
+              if (event.key === 'Enter') {
                   sendButton.click();
+              }
+          });
+
+          function scrollToBottom() {
+              chatArea.scrollTop = chatArea.scrollHeight;
+          }
+
+          //listen for messages from extension
+          window.addEventListener('message', (event) => {
+              const message = event.data;
+              if (message.command === 'response') {
+                  const responseElement = document.createElement('div');
+                  responseElement.className = 'message';
+                  const contentElement = document.createElement('div');
+                  contentElement.className = 'message-content';
+                  contentElement.textContent = message.text;
+                  responseElement.appendChild(contentElement);
+                  chatArea.appendChild(responseElement);
               }
           });
       </script>

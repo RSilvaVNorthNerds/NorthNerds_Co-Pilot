@@ -29,10 +29,23 @@ export function activate(context: vscode.ExtensionContext) {
             try {
               const llmController = new LLMController();
               const response = await llmController.sendMessage(message.text);
-              await vscode.window.showInformationMessage(
-                response.content[0].text
-              );
+
+              //send response to webview
+              webviewView.webview.postMessage({
+                command: "response",
+                text: response.content[0].text,
+              });
             } catch (error) {
+              // Send error message to webview
+              webviewView.webview.postMessage({
+                command: "response",
+                text:
+                  error instanceof Error
+                    ? error.message
+                    : "An unexpected error occurred",
+              });
+
+              // Also show error in VS Code
               if (error instanceof Error) {
                 await vscode.window.showErrorMessage(
                   `Error: ${error.message}. Please try again in a moment.`
