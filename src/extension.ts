@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
 import SidePanel from "./sidePanel/sidePanel";
+import LLMController from "./controllers/LLMController";
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -20,9 +21,25 @@ export function activate(context: vscode.ExtensionContext) {
         provider.resolveWebviewView(webviewView);
 
         // Add a message listener for the webview
-        webviewView.webview.onDidReceiveMessage((message) => {
+        webviewView.webview.onDidReceiveMessage(async (message) => {
           if (message.command === "message") {
-            vscode.window.showInformationMessage(message.text);
+            try {
+              const llmController = new LLMController();
+              const response = await llmController.sendMessage(message.text);
+              await vscode.window.showInformationMessage(
+                response.content[0].text
+              );
+            } catch (error) {
+              if (error instanceof Error) {
+                await vscode.window.showErrorMessage(
+                  `Error: ${error.message}. Please try again in a moment.`
+                );
+              } else {
+                await vscode.window.showErrorMessage(
+                  "An unexpected error occurred. Please try again later."
+                );
+              }
+            }
           }
         });
       },
