@@ -3,9 +3,6 @@ import {
   InvokeModelCommand,
   InvokeModelCommandOutput,
 } from "@aws-sdk/client-bedrock-runtime";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 export default class LLMController {
   private bedrockRuntimeClient: BedrockRuntimeClient;
